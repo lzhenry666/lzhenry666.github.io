@@ -1,3 +1,25 @@
 {
-    "liveServer.settings.port": 5501
+    "liveServer.settings.port": 5501,
+    "html.autoClosingTags": true,
+    "javascript.autoClosingTags": true,
+    "typescript.autoClosingTags": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.formatOnSave": true,
+    "[markdown]": {
+        "files.trimTrailingWhitespace": false
+      },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+
+    },
+    "editor.bracketPairColorization.enabled": true,
+    "javascript.suggest.autoImports": true,
+    "typescript.suggest.autoImports": true,
+    "javascript.updateImportsOnFileMove.enabled": "prompt",
+    "typescript.updateImportsOnFileMove.enabled": "prompt",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    }
+
+
 }

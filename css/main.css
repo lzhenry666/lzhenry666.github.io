@@ -1843,3 +1843,9 @@ ul.hb-list li h6 {
 
 
 .proj-desc span{display:none;}
+.goog-te-gadget{
+  position: absolute;
+    top: 0;
+display: none;
+}
+.skiptranslate{   display: none; }

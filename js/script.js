@@ -268,3 +268,25 @@ function filtrarItens(valor) {
     }
   }
 }
+
+// Detectar idioma do usuário
+// Inclua a biblioteca do Google Translate no seu HTML:
+// <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+// Função para traduzir o texto do site
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    { pageLanguage: "en" },
+    "google_translate_element"
+  );
+}
+var flags = document.getElementsByClassName("flag_link");
+
+Array.prototype.forEach.call(flags, function (e) {
+  e.addEventListener("click", function () {
+    var lang = e.getAttribute("data-lang");
+    var languageSelect = document.querySelector("select.goog-te-combo");
+    languageSelect.value = lang;
+    languageSelect.dispatchEvent(new Event("change"));
+  });
+});

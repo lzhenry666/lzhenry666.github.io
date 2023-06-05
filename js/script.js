@@ -288,5 +288,11 @@ Array.prototype.forEach.call(flags, function (e) {
     var languageSelect = document.querySelector("select.goog-te-combo");
     languageSelect.value = lang;
     languageSelect.dispatchEvent(new Event("change"));
+
+    // Adicionar o seguinte código após a troca de idioma
+    setTimeout(function () {
+      languageSelect.value = lang;
+      languageSelect.dispatchEvent(new Event("change"));
+    }, 100);
   });
 });

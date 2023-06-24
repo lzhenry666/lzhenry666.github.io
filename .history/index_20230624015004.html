@@ -1331,8 +1331,8 @@
             })(jQuery);
     </script>
 
-    <script src="/js/maps/mapsJavaScriptAPI.js" async defer></script>
-    <script>;
+    <script src="mapsJavaScriptAPI.js" async defer></script>
+    <script>
         async function getIPAndLocation() {
             try {
                 const ipResponse = await fetch("https://api.ipify.org?format=json");
@@ -1371,18 +1371,7 @@
             var difflat = rlat2 - rlat1; // Radian difference (latitudes)
             var difflon = (mk2.position.lng() - mk1.position.lng()) * (Math.PI / 180); // Radian difference (longitudes)
 
-            var d =
-                2 *
-                R *
-                Math.asin(
-                    Math.sqrt(
-                        Math.sin(difflat / 2) * Math.sin(difflat / 2) +
-                        Math.cos(rlat1) *
-                        Math.cos(rlat2) *
-                        Math.sin(difflon / 2) *
-                        Math.sin(difflon / 2)
-                    )
-                );
+            var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
             return d;
         }
         var map;
@@ -1390,15 +1379,9 @@
             const { lat, lng } = await getIPAndLocation();
 
             // The map, centered on Central Park
-            const center = {
-                lat: parseFloat(-23.502914035391417),
-                lng: parseFloat(-46.44341215307001),
-            };
+            const center = { lat: parseFloat(-23.502914035391417), lng: parseFloat(-46.44341215307001) };
             const options = {
-                zoom: 15,
-                scaleControl: true,
-                center: center,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                zoom: 15, scaleControl: true, center: center, mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             map = new google.maps.Map(document.getElementById("map"), options);
             // Locations of landmarks
@@ -1418,7 +1401,7 @@
                 position: p2,
                 map: map,
                 icon: {
-                    url: "img/point.png",
+                    url: "img/marker.png",
                     scaledSize: new google.maps.Size(35, 45),
                 },
             });
@@ -1436,42 +1419,29 @@
 
                 // Definindo a velocidade baseada no modo de transporte
                 switch (modoDeTransporte) {
-                    case "caminhada":
-                        velocidade = 5; // Velocidade média de caminhada é de cerca de 5km/h
+                    case 'caminhada':
+                        velocidade = 5;  // Velocidade média de caminhada é de cerca de 5km/h
                         break;
-                    case "transportePublico":
-                        velocidade = 30; // Velocidade média de transporte público pode ser de cerca de 30km/h
+                    case 'transportePublico':
+                        velocidade = 30;  // Velocidade média de transporte público pode ser de cerca de 30km/h
                         break;
                     default:
-                        return "Modo de transporte desconhecido.";
+                        return 'Modo de transporte desconhecido.';
                 }
 
-                let tempo = (distanciaEmKm / velocidade) * 60; // tempo = distância / velocidade, convertendo para minutos
+                let tempo = (distanciaEmKm / velocidade) * 60;  // tempo = distância / velocidade, convertendo para minutos
 
-                if (tempo > 60) {
-                    let horas = Math.floor(tempo / 60); // convertendo para horas, parte inteira
-                    let minutos = Math.round((tempo % 60) * 100) / 100; // restante convertido para minutos, e arredondado para duas casas decimais
-                    return `${horas} horas e ${minutos} minutos`;
-                } else {
-                    return `${tempo.toFixed(2)} minutos`; // O tempo de viagem estimado em minutos, limitado a duas casas decimais
-                }
+                return tempo.toFixed(2);  // O tempo de viagem estimado em minutos, limitado a duas casas decimais
             }
+            let tempoCaminhada = calcularTempoDeViagem(distance, 'caminhada');
+            console.log(`Tempo de viagem a pé: ${tempoCaminhada} horas.`);
 
-            let tempoCaminhada = calcularTempoDeViagem(distance, "caminhada");
-            let tempoTransportePublico = calcularTempoDeViagem(
-                distance,
-                "transportePublico"
-            );
-            document.getElementById("msg").innerHTML =
-                "Distância entre marcadores: " +
-                distance.toFixed(2) +
-                " km." +
-                "<br>" +
-                "Tempo estimado para viajar de carro: " +
-                tempoTransportePublico +
-                "<br>" +
-                "Tempo estimado para percorrer a pé: " +
-                tempoCaminhada;
+            let tempoTransportePublico = calcularTempoDeViagem(distance, 'transportePublico');
+            console.log(`Tempo de viagem de transporte público: ${tempoTransportePublico} horas.`);
+
+            document.getElementById('msg').innerHTML = "Distance between markers: " + distance.toFixed(2) + " km." + "<br>" + "Estimated time to travel by car: " + tempoTransportePublico.toFixed() + " min." + "<br>" + "Estimated time to travel by walking: " + tempoCaminhada.toFixed() + " min.";
+
+
         }
     </script>
     <script async defer

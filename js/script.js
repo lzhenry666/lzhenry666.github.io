@@ -8,153 +8,122 @@
 
     $(".loader-inner").fadeOut();
     $(".loader").delay(200).fadeOut("slow");
+    fetchPosts();
+    fetchProjects();
+    SearhPostHandler();
   });
 
   // Document ready
+  (function () {
+    // get all data in form and return object
+    function getFormData(form) {
+      var elements = form.elements;
+      var honeypot;
 
-  $(document).ready(function () {
-    // Site slider
-
-    $("#testimonial-carousel").owlCarousel({
-      navigation: false,
-      slideSpeed: 300,
-      paginationSpeed: 400,
-      responsiveRefreshRate: 200,
-      responsiveBaseWidth: window,
-      pagination: true,
-      autoPlay: true,
-      singleItem: true,
-    });
-
-    $("#block-slider").owlCarousel({
-      navigation: true,
-      slideSpeed: 300,
-      paginationSpeed: 400,
-      responsiveRefreshRate: 200,
-      responsiveBaseWidth: window,
-      pagination: false,
-      autoPlay: true,
-      singleItem: true,
-      navigationText: [
-        "<span class='icon-left-open-big'></span>",
-        "<span class='icon-right-open-big'></span>",
-      ],
-    });
-
-    //Portfolio setup
-
-    $(".popup").magnificPopup({
-      type: "image",
-      fixedContentPos: false,
-      fixedBgPos: false,
-      mainClass: "mfp-no-margins mfp-with-zoom",
-      image: {
-        verticalFit: true,
-      },
-      zoom: {
-        enabled: true,
-        duration: 300,
-      },
-    });
-
-    var works = $(".works");
-    $(".popup-youtube, .popup-vimeo").magnificPopup({
-      disableOn: 700,
-      type: "iframe",
-      mainClass: "mfp-fade",
-      removalDelay: 160,
-      preloader: false,
-      fixedContentPos: false,
-    });
-
-    $(".filter ").on("click", "li a", function () {
-      $(this).addClass("active");
-      $(this).parent().siblings().find("a").removeClass("active");
-      var filters = $(this).attr("data-filter");
-      $(this).closest(works).find(".item").removeClass("disable");
-
-      if (filters !== "all") {
-        var selected = $(this).closest(works).find(".item");
-        for (var i = 0; i < selected.length; i++) {
-          if (!selected.eq(i).hasClass(filters)) {
-            selected.eq(i).addClass("disable");
+      var fields = Object.keys(elements)
+        .filter(function (k) {
+          if (elements[k].name === "honeypot") {
+            honeypot = elements[k].value;
+            return false;
           }
+          return true;
+        })
+        .map(function (k) {
+          if (elements[k].name !== undefined) {
+            return elements[k].name;
+            // special case for Edge's html collection
+          } else if (elements[k].length > 0) {
+            return elements[k].item(0).name;
+          }
+        })
+        .filter(function (item, pos, self) {
+          return self.indexOf(item) == pos && item;
+        });
+
+      var formData = {};
+      fields.forEach(function (name) {
+        var element = elements[name];
+
+        // singular form elements just have one value
+        formData[name] = element.value;
+
+        // when our element has multiple items, get their values
+        if (element.length) {
+          var data = [];
+          for (var i = 0; i < element.length; i++) {
+            var item = element.item(i);
+            if (item.checked || item.selected) {
+              data.push(item.value);
+            }
+          }
+          formData[name] = data.join(", ");
         }
-      }
+      });
 
-      return false;
-    });
+      // add form-specific values into the data
+      formData.formDataNameOrder = JSON.stringify(fields);
+      formData.formGoogleSheetName = form.dataset.sheet || "responses"; // default sheet name
+      formData.formGoogleSendEmail = form.dataset.email || ""; // no email by default
 
-    // Search input
+      return { data: formData, honeypot: honeypot };
+    }
 
-    $(".search-form i").on("click", function () {
-      $(this).closest(".search-form").find('input[type="text"]').focus();
-      if ($(this).closest(".search-form").find('input[type="text"]').val()) {
-        $(this)
-          .closest(".search-form")
-          .find('input[type="submit"]')
-          .trigger("click");
-      }
-    });
+    function handleFormSubmit(event) {
+      // handles form submit without any jquery
+      event.preventDefault(); // we are submitting via xhr below
+      var form = event.target;
+      var formData = getFormData(form);
+      var data = formData.data;
 
-    // Form validation
-
-    var inputName = $("input#name");
-    var inputEmail = $("input#email");
-    var textArea = $("textarea#message");
-    var contactForm = $(".contact-form");
-
-    $(".submit").on("click", function () {
-      inputName.removeClass("errorForm");
-      textArea.removeClass("errorForm");
-      inputEmail.removeClass("errorForm");
-
-      var error = false;
-      var name = inputName.val();
-      if (name == "" || name == " ") {
-        error = true;
-        inputName.addClass("errorForm");
-      }
-
-      var msg = textArea.val();
-      if (msg == "" || msg == " ") {
-        error = true;
-        textArea.addClass("errorForm");
-      }
-
-      var email_compare = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
-      var email = inputEmail.val();
-      if (email == "" || email == " ") {
-        inputEmail.addClass("errorForm");
-        error = true;
-      } else if (!email_compare.test(email)) {
-        inputEmail.addClass("errorForm");
-        error = true;
-      }
-
-      if (error == true) {
+      // If a honeypot field is filled, assume it was done so by a spam bot.
+      if (formData.honeypot) {
         return false;
       }
 
-      var data_string = contactForm.serialize();
-
-      $.ajax({
-        type: "POST",
-        url: contactForm.attr("action"),
-        data: data_string,
-
-        success: function (message) {
-          if (message == "SENDING") {
-            $("#success").fadeIn("slow");
-          } else {
-            $("#error").fadeIn("slow");
+      disableAllButtons(form);
+      var url = form.action;
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url);
+      // xhr.withCredentials = true;
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          form.reset();
+          var formElements = form.querySelector(".form-elements");
+          if (formElements) {
+            formElements.style.display = "none"; // hide form
           }
-        },
-      });
+          var thankYouMessage = form.querySelector(".thankyou_message");
+          if (thankYouMessage) {
+            thankYouMessage.style.display = "block";
+          }
+        }
+      };
+      // url encode form data for sending as post data
+      var encoded = Object.keys(data)
+        .map(function (k) {
+          return encodeURIComponent(k) + "=" + encodeURIComponent(data[k]);
+        })
+        .join("&");
+      xhr.send(encoded);
+    }
 
-      return false;
-    });
-  });
+    function loaded() {
+      // bind to the submit event of our form
+      var forms = document.querySelectorAll("form.gform");
+      for (var i = 0; i < forms.length; i++) {
+        forms[i].addEventListener("submit", handleFormSubmit, false);
+      }
+    }
+    document.addEventListener("DOMContentLoaded", loaded, false);
+
+    function disableAllButtons(form) {
+      var buttons = form.querySelectorAll("button");
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+      }
+    }
+  })();
 })(jQuery);
 
 document.addEventListener("DOMContentLoaded", () => {

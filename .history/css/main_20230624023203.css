@@ -1682,32 +1682,14 @@ ul.hb-list li h6 {
 	.timeline .timeline-inner .detail {margin-left: 38%;width: 66%;}
 	.timeline .timeline-inner .name:before{right: -42px;}
 	.footer{position:absolute;top:-41px;z-index:10;right:0px;}
-    .footer .social,
-    .footer #acess {
-      float: left;
-      margin-left: 0;
-    }
+	.footer .social{float:left;margin-left:0; width:40%;}
+    .footer #acess{float:right;margin-left:0;width:40%;}
 
-    .footer .social li,
-    .footer #acess li {
-      float: left;
-      margin-left: 1px;
-    }
+	.footer .social li{float: left; margin-left: 1px;}
+    .footer #acess{float:left;margin: left 1px;;}
 
-    .footer .copyright,
-    .footer #acess {
-      float: left;
-      margin-left: 1px;
-      -webkit-transform: none;
-      transform: none;
-    }
-
-     .footer #acess {
-        display: flex;
-        flex-wrap: wrap;
-      }
-
-
+	.footer .copyright {float:left;margin-left:1px; -webkit-transform: none;transform: none; width: 20%;}
+    .footer #acess {float:left;margin-left:1px; -webkit-transform: none;transform: none;}
 	.listing a.btn-2 {right: 14%;}
 	.listing a.btn-1 {left: -12.2%;}
 	.listing-large .listing-event .data.right{width:65%;margin-left: 38.8%;}

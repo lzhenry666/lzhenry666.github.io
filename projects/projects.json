@@ -1,0 +1,49 @@
+{
+    "projetos": [
+        {
+            "classe": "col-sm-6",
+            "titulo": "Portal OAB NOW",
+            "categoria": "Web design",
+            "imagem": "img/portfolio/Portal-OAB-NOW.PNG",
+            "legenda": "Portal-OAB-NOW, feito em html, css,js , php wordpresss, porta para alunos de direito na faculdade damasio",
+            "miniatura": "img/portfolio/Portal-OAB-NOW.png",
+            "link": "img/portfolio/Portal-OAB-NOW.png"
+        },
+        {
+            "classe": "col-sm-6",
+            "titulo": "Tyrano Code",
+            "categoria": "Web Dev",
+            "imagem": "/img/portfolio/Baixa%20tudo%20-%20Online%20Video%20Download%20Tool-1.png",
+            "legenda": "Meu blog pessoal voltado a tech, feito wordpresss",
+            "miniatura": "img/portfolio/Baixa%20tudo%20-%20Online%20Video%20Download%20Tool-1.png",
+            "link": "https://tyranocode.com/"
+        },
+        {
+            "classe": "col-sm-6",
+            "titulo": "Biblioteca Adtalem Brasil",
+            "categoria": "Web design",
+            "imagem": "/img/portfolio/Biblioteca-adtalembrasil.jpg",
+            "legenda": "Site : <a href='http://literaprototipagem.esy.es/'  target='_blank'>Biblioteca Adtalem Brasil</a>, biblioteca feita em  wordpress  para faculdade damasio, Yduqs e Estacio",
+            "miniatura": "img/portfolio/Baixa%20tudo%20-%20Online%20Video%20Download%20Tool-1.png",
+            "link": "http://literaprototipagem.esy.es/"
+        },
+        {
+            "classe": "col-sm-6",
+            "titulo": "Daora Games",
+            "categoria": "Web Dev",
+            "imagem": "img/portfolio/daoragames.png",
+            "legenda": "Meu blog pessoal voltado a tech, feito wordpresss",
+            "miniatura": "img/portfolio/daoragames.png",
+            "link": "https://daoragames.com/"
+        },
+        {
+            "classe": "col-sm-6",
+            "titulo": "Faculdade Wyden",
+            "categoria": "Web design",
+            "imagem": "/img/portfolio/Saturn%20Code%20-%20Web%20Storage.png",
+            "legenda": "Site : <a href='http://projetolitera.esy.es/'  target='_blank'>Faculdade Wyden</a>, website institucional para divagar polos da ma",
+            "miniatura": "/img/portfolio/Saturn%20Code%20-%20Web%20Storage.png",
+            "link": "http://projetolitera.esy.es/"
+        }
+    ]
+}

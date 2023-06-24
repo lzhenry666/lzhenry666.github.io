@@ -1011,7 +1011,6 @@
 
                                                 <div id="map"></div>
                                                 <div id="msg"></div>
-                                                <div id="test"></div>
                                             </div>
                                             <!--End map-->
                                         </div>
@@ -1331,8 +1330,8 @@
             })(jQuery);
     </script>
 
-    <script src="/js/maps/mapsJavaScriptAPI.js" async defer></script>
-    <script>;
+    <script src="mapsJavaScriptAPI.js" async defer></script>
+    <script>
         async function getIPAndLocation() {
             try {
                 const ipResponse = await fetch("https://api.ipify.org?format=json");
@@ -1371,18 +1370,7 @@
             var difflat = rlat2 - rlat1; // Radian difference (latitudes)
             var difflon = (mk2.position.lng() - mk1.position.lng()) * (Math.PI / 180); // Radian difference (longitudes)
 
-            var d =
-                2 *
-                R *
-                Math.asin(
-                    Math.sqrt(
-                        Math.sin(difflat / 2) * Math.sin(difflat / 2) +
-                        Math.cos(rlat1) *
-                        Math.cos(rlat2) *
-                        Math.sin(difflon / 2) *
-                        Math.sin(difflon / 2)
-                    )
-                );
+            var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
             return d;
         }
         var map;
@@ -1390,21 +1378,15 @@
             const { lat, lng } = await getIPAndLocation();
 
             // The map, centered on Central Park
-            const center = {
-                lat: parseFloat(-23.502914035391417),
-                lng: parseFloat(-46.44341215307001),
-            };
-            const options = {
-                zoom: 15,
-                scaleControl: true,
-                center: center,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-            };
+            const center = { lat: parseFloat(-23.502914035391417), lng: parseFloat(-46.44341215307001) };
+            const options = { zoom: 15, scaleControl: true, center: center };
             map = new google.maps.Map(document.getElementById("map"), options);
             // Locations of landmarks
             const p1 = { lat: -23.502914035391417, lng: -46.44341215307001 };
+            console.log(`🚀 ~ file: index.html:1376 ~ initMap ~ p1:`, lat, lng);
             const p2 = { lat: lat, lng: lng };
 
+            console.log(`🚀 ~ file: index.html:1380 ~ initMap ~ p2:`, p2);
             // The markers for The Dakota and The Frick Collection
             var mk1 = new google.maps.Marker({
                 position: p1,
@@ -1418,7 +1400,7 @@
                 position: p2,
                 map: map,
                 icon: {
-                    url: "img/point.png",
+                    url: "img/marker.png",
                     scaledSize: new google.maps.Size(35, 45),
                 },
             });
@@ -1429,49 +1411,38 @@
             var distance = haversine_distance(mk1, mk2);
             //convert miles to km
             distance = distance * 1.609344;
-            //function to  calculate  the  time was taken to travel between two points with  a car, bike or walking
+            document.getElementById('msg').innerHTML = "Distance between markers: " + distance.toFixed(2) + " km.";
 
-            function calcularTempoDeViagem(distanciaEmKm, modoDeTransporte) {
-                let velocidade;
 
-                // Definindo a velocidade baseada no modo de transporte
-                switch (modoDeTransporte) {
-                    case "caminhada":
-                        velocidade = 5; // Velocidade média de caminhada é de cerca de 5km/h
-                        break;
-                    case "transportePublico":
-                        velocidade = 30; // Velocidade média de transporte público pode ser de cerca de 30km/h
-                        break;
-                    default:
-                        return "Modo de transporte desconhecido.";
-                }
+            let directionsService = new google.maps.DirectionsService();
+            let directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map); // Existing map object displays directions
+            console.log(`🚀 ~ file: index.html:1419 ~ initMap ~ directionsRenderer:`, directionsRenderer);
 
-                let tempo = (distanciaEmKm / velocidade) * 60; // tempo = distância / velocidade, convertendo para minutos
-
-                if (tempo > 60) {
-                    let horas = Math.floor(tempo / 60); // convertendo para horas, parte inteira
-                    let minutos = Math.round((tempo % 60) * 100) / 100; // restante convertido para minutos, e arredondado para duas casas decimais
-                    return `${horas} horas e ${minutos} minutos`;
-                } else {
-                    return `${tempo.toFixed(2)} minutos`; // O tempo de viagem estimado em minutos, limitado a duas casas decimais
-                }
+            // Create route from existing points used for markers
+            const route = {
+                origin: p1,
+                destination: p2,
+                travelMode: 'DRIVING'
             }
 
-            let tempoCaminhada = calcularTempoDeViagem(distance, "caminhada");
-            let tempoTransportePublico = calcularTempoDeViagem(
-                distance,
-                "transportePublico"
-            );
-            document.getElementById("msg").innerHTML =
-                "Distância entre marcadores: " +
-                distance.toFixed(2) +
-                " km." +
-                "<br>" +
-                "Tempo estimado para viajar de carro: " +
-                tempoTransportePublico +
-                "<br>" +
-                "Tempo estimado para percorrer a pé: " +
-                tempoCaminhada;
+            directionsService.route(route,
+                function (response, status) { // anonymous function to capture directions
+                    if (status !== 'OK') {
+                        console.log('Directions request failed due to ' + status);
+                        return;
+                    } else {
+                        directionsRenderer.setDirections(response); // Add route to the map
+                        var directionsData = response.routes[0].legs[0]; // Get data about the mapped route
+                        if (!directionsData) {
+                            console.log('Directions request failed');
+                            return;
+                        }
+                        else {
+                            document.getElementById('msg').innerHTML += " Driving distance is " + directionsData.distance.text + " (" + directionsData.duration.text + ").";
+                        }
+                    }
+                });
         }
     </script>
     <script async defer

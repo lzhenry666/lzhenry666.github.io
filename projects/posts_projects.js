@@ -103,9 +103,9 @@ function displayProj(projetos) {
             </h5>
         </div>
         <a data-fancybox="gallery"
-            href="${proj.imagem}}"
+            href="${proj.imagem}"
             data-caption="${proj.legenda}">
-            <img src="${proj.imagem}" widht=""
+            <img src="${proj.imagem}" widht="300"
                 height="300">
         </a>
 

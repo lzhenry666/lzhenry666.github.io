@@ -1,4 +1,5 @@
 var CROSproxyURL = "https://www.whateverorigin.org/get?url=";
+//var CROSproxyURL = "https://cors-anywhere.herokuapp.com/";
 
 var args = "";
 if (typeof language != "undefined") args += "&language=" + language;
@@ -50,21 +51,27 @@ sendRequestThroughCROSproxy(
     createAndExecutePayload(googleAPIjs);
   }
 );
+async function sendRequestThroughCROSproxy(url, callback) {
+  try {
+    let response = await fetch(CROSproxyURL + encodeURIComponent(url));
 
-function sendRequestThroughCROSproxy(url, callback) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4) {
-      if (this.status == 200) {
-        if (callback) callback(JSON.parse(this.responseText).contents);
-      } else {
-        sendRequestThroughCROSproxy(url, callback); //retry
-      }
+    // Se a resposta não for bem-sucedida, tente novamente
+    if (!response.ok) {
+      return sendRequestThroughCROSproxy(url, callback);
     }
-  };
-  xhttp.open("GET", CROSproxyURL + encodeURIComponent(url), true);
-  xhttp.send();
+
+    let data = await response.json();
+
+    // Se houver uma função de callback, chame-a com os dados da resposta
+    if (callback) {
+      callback(data.contents);
+    }
+  } catch (error) {
+    console.error("Erro ao fazer a requisição:", error);
+    return sendRequestThroughCROSproxy(url, callback); // tenta novamente em caso de erro
+  }
 }
+
 async function getIPAndLocation() {
   try {
     const ipResponse = await fetch("https://api.ipify.org?format=json");

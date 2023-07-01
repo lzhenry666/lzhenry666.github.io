@@ -6,8 +6,6 @@
   $(window).load(function () {
     // Site loader
 
-    $(".loader-inner").fadeOut();
-    $(".loader").delay(200).fadeOut("slow");
     fetchPosts();
     fetchProjects();
     SearhPostHandler();
@@ -260,3 +258,28 @@ Array.prototype.forEach.call(flags, function (e) {
     }, 100);
   });
 });
+const tags = ["#wrapper"];
+const loader_page = document.createElement("div");
+
+const alterarVisibilidade = (tags, displayStyle) => {
+  tags.forEach((tag) => {
+    const element = document.querySelector(tag);
+    if (element) {
+      element.style.display = displayStyle;
+    }
+  });
+};
+
+function loader() {
+  alterarVisibilidade(tags, "none");
+  loader_page.innerHTML =
+    '<div class="pokebola">  <div class="pokebola-botao"></div></div>';
+  document.body.appendChild(loader_page);
+
+  setTimeout(() => {
+    alterarVisibilidade(tags, "block");
+    loader_page.style.display = "none";
+  }, 2000);
+}
+
+loader();

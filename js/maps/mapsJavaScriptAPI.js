@@ -1,5 +1,4 @@
 var CROSproxyURL = "https://www.whateverorigin.org/get?url=";
-//var CROSproxyURL = "https://cors-anywhere.herokuapp.com/";
 
 var args = "";
 if (typeof language != "undefined") args += "&language=" + language;
@@ -51,58 +50,45 @@ sendRequestThroughCROSproxy(
     createAndExecutePayload(googleAPIjs);
   }
 );
-async function sendRequestThroughCROSproxy(url, callback) {
-  try {
-    let response = await fetch(CROSproxyURL + encodeURIComponent(url));
 
-    // Se a resposta não for bem-sucedida, tente novamente
-    if (!response.ok) {
-      return sendRequestThroughCROSproxy(url, callback);
+function sendRequestThroughCROSproxy(url, callback) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+        if (callback) callback(JSON.parse(this.responseText).contents);
+      } else {
+        sendRequestThroughCROSproxy(url, callback); //retry
+      }
     }
-
-    let data = await response.json();
-
-    // Se houver uma função de callback, chame-a com os dados da resposta
-    if (callback) {
-      callback(data.contents);
-    }
-  } catch (error) {
-    console.error("Erro ao fazer a requisição:", error);
-    return sendRequestThroughCROSproxy(url, callback); // tenta novamente em caso de erro
-  }
+  };
+  xhttp.open("GET", CROSproxyURL + encodeURIComponent(url), true);
+  xhttp.send();
 }
 
 async function getIPAndLocation() {
+  const url = "https://ip-geo-location.p.rapidapi.com/ip/check?format=json";
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": "c6224dcafcmsh508f47439a28567p11af11jsn08cef2d57a75",
+      "X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com",
+    },
+  };
+
   try {
-    const ipResponse = await fetch("https://api.ipify.org?format=json");
-    const ipData = await ipResponse.json();
-    const ip = ipData.ip;
-    alert("seu ip é, " + ip);
+    const response = await fetch(url, options);
+    const result = await response.json();
+    //const lat = result.location.latitude;
+    //const lng = result.location.longitude;
+    const { latitude: lat, longitude: lng } = result.location;
+    console.log(`Latitude: ${lat}, Longitude: ${lng}`);
 
-    const locResponse = await fetch(`http://ip-api.com/json/${ip}`);
-    const locData = await locResponse.json();
-    console.log(
-      `🚀 ~ file: index.html:1334 ~ getIPAndLocation ~ locData:`,
-      locData,
-      locData.lat,
-      locData.lon
-    );
-
-    const lat = locData.lat;
-    console.log(`🚀 ~ file: index.html:1337 ~ getIPAndLocation ~ lat:`, lat);
-    const lng = locData.lon;
-    console.log(`🚀 ~ file: index.html:1338 ~ getIPAndLocation ~ lng:`, lng);
-    alert("Olá, você esta nasa proximmidades  de: ", lat + "," + lng);
-
-    return {
-      lat,
-      lng,
-    };
+    return { lat, lng };
   } catch (error) {
-    console.error("Erro ao obter IP e localização:", error);
+    console.error(error);
   }
 }
-
 function haversine_distance(mk1, mk2) {
   var R = 3958.8; // Radius of the Earth in miles
   var rlat1 = mk1.position.lat() * (Math.PI / 180); // Convert degrees to radians

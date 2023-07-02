@@ -46,7 +46,7 @@ function displayPosts(posts) {
   </div>`;
   }
   postsHTML +=
-    '<a class="but" href="https://tyranocode.com/" target="_blank">Veja Todos os Posts do Blog<span class="right-arr">→</span></a>';
+    '<a class="but" href="https://tyranocode.com/" target="_blank">See all blog posts<span class="right-arr">→</span></a>';
   document.querySelector(".block-posts").innerHTML = postsHTML;
 }
 
@@ -83,15 +83,20 @@ async function fetchProjects() {
     if (!response.ok) {
       throw new Error(`Erro ${response.status} ${response.statusText}`);
     }
-    const posts = await response.json();
-    postsData = posts;
-    displayProj(postsData);
+    const projetos = await response.json();
+    displayProj(projetos);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
+
 function displayProj(projetos) {
-  console.log(projetos);
+  const workElement = document.querySelector(".work");
+  if (!workElement) {
+    console.error("Elemento .work não encontrado!");
+    return;
+  }
+
   let postsHTML = "";
   for (let proj of projetos.projetos) {
     postsHTML += `
@@ -114,8 +119,12 @@ function displayProj(projetos) {
 </li>`;
   }
 
-  document.querySelector(".work").innerHTML = postsHTML;
+  workElement.innerHTML = postsHTML;
 }
+
+// Uso
+fetchProjects();
+
 exports = {
   fetchPosts,
   fetchProjects,

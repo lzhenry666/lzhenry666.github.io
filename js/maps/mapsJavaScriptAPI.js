@@ -202,13 +202,13 @@ async function initMap() {
     "transportePublico"
   );
   document.getElementById("msg").innerHTML =
-    "Distância entre marcadores: " +
+    "Distance between marks: " +
     distance.toFixed(2) +
     " km." +
     "<br>" +
-    "Tempo estimado para viajar de carro: " +
+    "Travel time with car: " +
     tempoTransportePublico +
     "<br>" +
-    "Tempo estimado para percorrer a pé: " +
+    "Travel time by walking: " +
     tempoCaminhada;
 }

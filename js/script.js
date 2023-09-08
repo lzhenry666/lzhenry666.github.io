@@ -1,14 +1,52 @@
-(function ($) {
-  "use strict";
+import {
+  SearchPostHandler,
+  fetchPosts,
+  fetchProjects,
+  fetchRepos,
+  searchReposHandler,
+  setupClearIcon,
+} from "/projects/posts_projects.js";
+const tags = ["#wrapper"];
+const loader_page = document.createElement("div");
 
+const alterarVisibilidade = (tags, displayStyle) => {
+  tags.forEach((tag) => {
+    const element = document.querySelector(tag);
+    if (element) {
+      element.style.display = displayStyle;
+    }
+  });
+};
+
+function loader() {
+  alterarVisibilidade(tags, "none");
+  loader_page.innerHTML =
+    '<div class="pokebola">  <div class="pokebola-botao"></div></div>';
+  document.body.appendChild(loader_page);
+
+  setTimeout(() => {
+    alterarVisibilidade(tags, "block");
+    loader_page.style.display = "none";
+  }, 2000);
+}
+
+(function ($) {
   // Windows load
 
-  $(window).load(function () {
+  $(window).on("load", function () {
     // Site loader
+    loader();
 
-    fetchPosts();
-    fetchProjects();
-    SearhPostHandler();
+    let initialize = async () => {
+      await fetchPosts();
+      await fetchProjects();
+      await fetchRepos();
+    };
+    initialize();
+    SearchPostHandler();
+    searchReposHandler();
+    setupClearIcon("search-posts-form", "search-post", "clear-icon-post");
+    setupClearIcon("search-repos-form", "search-repo", "clear-icon-repo");
   });
 
   // Document ready
@@ -235,51 +273,3 @@ function filtrarItens(valor) {
     }
   }
 }
-
-// Função para traduzir o texto do site
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement(
-    { pageLanguage: "en" },
-    "google_translate_element"
-  );
-}
-var flags = document.getElementsByClassName("flag_link");
-
-Array.prototype.forEach.call(flags, function (e) {
-  e.addEventListener("click", function () {
-    var lang = e.getAttribute("data-lang");
-    var languageSelect = document.querySelector("select.goog-te-combo");
-    languageSelect.value = lang;
-    languageSelect.dispatchEvent(new Event("change"));
-
-    setTimeout(function () {
-      languageSelect.value = lang;
-      languageSelect.dispatchEvent(new Event("change"));
-    }, 100);
-  });
-});
-const tags = ["#wrapper"];
-const loader_page = document.createElement("div");
-
-const alterarVisibilidade = (tags, displayStyle) => {
-  tags.forEach((tag) => {
-    const element = document.querySelector(tag);
-    if (element) {
-      element.style.display = displayStyle;
-    }
-  });
-};
-
-function loader() {
-  alterarVisibilidade(tags, "none");
-  loader_page.innerHTML =
-    '<div class="pokebola">  <div class="pokebola-botao"></div></div>';
-  document.body.appendChild(loader_page);
-
-  setTimeout(() => {
-    alterarVisibilidade(tags, "block");
-    loader_page.style.display = "none";
-  }, 2000);
-}
-
-loader();

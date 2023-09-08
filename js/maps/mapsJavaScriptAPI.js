@@ -11,7 +11,7 @@ var bypass = function (googleAPIcomponentJS, googleAPIcomponentURL) {
       sendRequestThroughCROSproxy(googleAPIcomponentURL, (responseText) => {
         var script = document.createElement("script");
         script.innerHTML = responseText.replace(
-          new RegExp(/;if.*Failure.*\}/),
+          new RegExp(/;if.*Failure.*?\}/),
           ";"
         );
         document.head.appendChild(script);
@@ -71,7 +71,7 @@ async function getIPAndLocation() {
   const options = {
     method: "GET",
     headers: {
-      "X-RapidAPI-Key": "c6224dcafcmsh508f47439a28567p11af11jsn08cef2d57a75",
+      "X-RapidAPI-Key": "9ec2d043f7msh6c66133eafe488ap186087jsn9a4ac05a71b0",
       "X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com",
     },
   };
@@ -82,13 +82,14 @@ async function getIPAndLocation() {
     //const lat = result.location.latitude;
     //const lng = result.location.longitude;
     const { latitude: lat, longitude: lng } = result.location;
-    console.log(`Latitude: ${lat}, Longitude: ${lng}`);
+    // console.log(`Latitude: ${lat}, Longitude: ${lng}`);
 
     return { lat, lng };
   } catch (error) {
     console.error(error);
   }
 }
+
 function haversine_distance(mk1, mk2) {
   var R = 3958.8; // Radius of the Earth in miles
   var rlat1 = mk1.position.lat() * (Math.PI / 180); // Convert degrees to radians

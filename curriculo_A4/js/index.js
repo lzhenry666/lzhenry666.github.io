@@ -68,14 +68,14 @@
 function gerarPDF() {
   // Configuração para o html2pdf.js
   var options = {
-    filename: "meuArquivoPDF.pdf",
-    image: { type: "jpeg", quality: 2 },
-    html2canvas: { scale: 0.75 },
-    jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+    filename: "LuizCientistaDaComputacao.pdf",
+    image: { type: "jpeg", quality: 0.95 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
   };
 
   // Obtém o conteúdo do corpo (body) da página
-  var corpoHTML = document.getElementById("meuElementoHTML");
+  var corpoHTML = document.querySelector(".resume");
 
   // Converte o conteúdo do corpo em PDF usando html2pdf.js
   html2pdf().set(options).from(corpoHTML).save();

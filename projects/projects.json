@@ -1,7 +1,7 @@
 {
     "projetos": [
         {
-            "classe": "col-sm-6",
+            "classe": "col-sm-3",
             "titulo": "Portal OAB NOW",
             "categoria": "Web design",
             "imagem": "img/portfolio/portal_oab.png",
@@ -10,7 +10,7 @@
             "link": "img/portfolio/portal_oab.png"
         },
         {
-            "classe": "col-sm-6",
+            "classe": "col-sm-3",
             "titulo": "Tyrano Code",
             "categoria": "Web Dev",
             "imagem": "/img/portfolio/Baixa%20tudo%20-%20Online%20Video%20Download%20Tool-1.png",
@@ -19,7 +19,7 @@
             "link": "https://tyranocode.com/"
         },
         {
-            "classe": "col-sm-6",
+            "classe": "col-sm-3",
             "titulo": "Biblioteca Adtalem Brasil",
             "categoria": "Web design",
             "imagem": "/img/portfolio/Biblioteca-adtalembrasil.jpg",
@@ -28,7 +28,7 @@
             "link": "http://literaprototipagem.esy.es/"
         },
         {
-            "classe": "col-sm-6",
+            "classe": "col-sm-3",
             "titulo": "Daora Games",
             "categoria": "Web Dev",
             "imagem": "img/portfolio/daoragames.png",
@@ -37,13 +37,49 @@
             "link": "https://daoragames.com/"
         },
         {
-            "classe": "col-sm-6",
+            "classe": "col-sm-3",
             "titulo": "Faculdade Wyden",
             "categoria": "Web design",
             "imagem": "/img/portfolio/Saturn%20Code%20-%20Web%20Storage.png",
             "legenda": "Site : <a href='http://projetolitera.esy.es/'  target='_blank'>Faculdade Wyden</a>, website institucional para divagar polos da ma",
             "miniatura": "/img/portfolio/Saturn%20Code%20-%20Web%20Storage.png",
             "link": "http://projetolitera.esy.es/"
+        },
+        {
+            "classe": "col-sm-3",
+            "titulo": "Game RPG B7",
+            "categoria": "Web Dev",
+            "imagem": "/img/portfolio/Gamerpg.png",
+            "legenda": "Site : <a href='https://lzhenry666.github.io/GameRpgB7/'  target='_blank'>Game Rpg paradigma Orientado a Objetos</a>",
+            "miniatura": "/img/portfolio/Gamerpg.png",
+            "link": "https://lzhenry666.github.io/GameRpgB7/"
+        },
+        {
+            "classe": "col-sm-3",
+            "titulo": "POKEDEX",
+            "categoria": "Web Dev",
+            "imagem": "/img/portfolio/dex.png",
+            "legenda": "Site : <a href='https://lzhenry666.github.io/POKEDEX/'  target='_blank'>Pokedex - Orientado a Eventos</a>",
+            "miniatura": "/img/portfolio/dex.png",
+            "link": "https://lzhenry666.github.io/POKEDEX/"
+        },
+        {
+            "classe": "col-sm-3",
+            "titulo": "POKEGAME",
+            "categoria": "Web Dev",
+            "imagem": "/img/portfolio/pokebolas.webp",
+            "legenda": "Site : <a href='https://lzhenry666.github.io/POKEGAMEAPI/'  target='_blank'>Game de perguntas e respostas -  utiliza paradigma imperativo buscando a  resolução objetiva</a>",
+            "miniatura": "/img/portfolio/pokebolas.webp",
+            "link": "https://lzhenry666.github.io/POKEGAMEAPI/"
+        },
+        {
+            "classe": "col-sm-3",
+            "titulo": "GERADOR DE TIMES DE POKEMON",
+            "categoria": "Web Dev",
+            "imagem": "/img/portfolio/pk2.jpg",
+            "legenda": "Site : <a href='https://lzhenry666.github.io/PokeTeamBuilder/'  target='_blank'>Pokemon Team Builder, utiliza paradigma Funcional mutanto dados ate o objetivo </a>",
+            "miniatura": "/img/portfolio/pk2.jpg",
+            "link": "https://lzhenry666.github.io/PokeTeamBuilder/"
         }
     ]
 }
